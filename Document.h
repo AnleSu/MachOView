@@ -6,6 +6,8 @@
  *
  */
 
+#import "MKDragView.h"
+
 @class MVDataController;
 
 @interface MVOutlineView : NSOutlineView
@@ -27,7 +29,7 @@
 @end
 
 
-@interface MVDocument : NSDocument
+@interface MVDocument : NSDocument <NSDraggingDestination,MKDragViewDelegate>
 {
   IBOutlet MVOutlineView *        leftView;
   IBOutlet MVTableView *          rightView;
@@ -38,6 +40,7 @@
   IBOutlet NSButton *             stopButton;
   MVDataController *              dataController;
   int32_t                         threadCount;
+    BOOL                          isFirstLoad;
 }
 @property (nonatomic,readonly) MVDataController * dataController;
 

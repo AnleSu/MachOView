@@ -18,6 +18,9 @@
 #import "Layout.h"
 #include <unistd.h>
 
+
+#import "MKDragView.h"
+
 //============================================================================
 @implementation MVOutlineView
 
@@ -302,7 +305,7 @@
 @end
 
 //============================================================================
-@implementation MVDocument
+@implementation MVDocument 
 
 @synthesize dataController;
 
@@ -337,6 +340,8 @@ enum ViewType
     dataController = [[MVDataController alloc] init];
     threadCount = 0;
     
+    
+      
     NSNotificationCenter * nc = [NSNotificationCenter defaultCenter];
     typeof(self) __weak weakSelf = self;
     
@@ -369,8 +374,73 @@ enum ViewType
   return self;
 }
 
+
+
+
+- (void)dragViewFileList:(NSArray *)fileList {
+    if(!fileList || [fileList count] <= 0) {
+        return;
+    }
+    NSInteger maxNum = 3;
+    for (int n = 0 ; n < [fileList count] ; n++) {
+        NSString *filePath = [fileList objectAtIndex:n];
+        BOOL isLastMachOView = [self onlyRunningMachOView:filePath];
+        if (isLastMachOView == YES){
+            if(maxNum == 0){
+                break;
+            }
+            maxNum --;
+            
+            if (isFirstLoad) {
+                [[[NSApplication sharedApplication] mainWindow] hidesOnDeactivate];
+                [[[NSApplication sharedApplication] mainWindow] close];
+                [[[NSApplication sharedApplication] mainWindow] performClose:self];
+            }
+            [self openNewWindow:filePath]; 
+        }
+    }
+}
+- (void)openNewWindow:(NSString*)filePath{
+    isFirstLoad = NO;
+    __autoreleasing NSError *error;
+    NSDocumentController * documentController = [NSDocumentController sharedDocumentController];
+    MVDocument * document = [documentController openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filePath]
+                                                                      display:YES
+                                                                        error:&error];
+    if (!document) {
+        [NSApp presentError:error];
+    }
+}
+- (BOOL)onlyRunningMachOView:(NSString*)filename {
+        NSURL * url = [NSURL fileURLWithPath:filename];
+        NSNumber * isRegularFile = nil;
+        [url getResourceValue:&isRegularFile forKey:NSURLIsRegularFileKey error:NULL];
+        if ([isRegularFile boolValue] == NO) {
+            return NO;
+        }
+        NSFileHandle * fileHandle = [NSFileHandle fileHandleForReadingAtPath:filename];
+        NSData * magicData = [fileHandle readDataOfLength:8];
+        [fileHandle closeFile];
+        if ([magicData length] < sizeof(uint32_t)) {
+            return NO;
+        }
+        uint32_t magic = *(uint32_t*)[magicData bytes];
+        if (magic == MH_MAGIC || magic == MH_MAGIC_64 ||
+            magic == FAT_CIGAM || magic == FAT_MAGIC) {
+            return YES;
+        }
+        if ([magicData length] < sizeof(uint64_t)) {
+            return NO;
+        }
+        if (*(uint64_t*)[magicData bytes] == *(uint64_t*)"!<arch>\n") {
+            return YES;
+        } 
+        return NO;
+}
+
+
 //----------------------------------------------------------------------------
-- (NSString *)windowNibName 
+- (NSString *)windowNibName // 1
 {
   // Implement this to return a nib to load OR implement -makeWindowControllers to manually create your controllers.
   return @"Layout";
@@ -478,7 +548,6 @@ enum ViewType
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController
 {
   [super windowControllerDidLoadNib:aController];
-  
   // fill in initial data sources
   [statusText setStringValue:@"Loading..."];
   for (MVLayout * layout in dataController.layouts)
@@ -491,7 +560,8 @@ enum ViewType
   [leftView expandItem:dataController.rootNode];
   
   // finish processing in background
-  [statusText setStringValue:@"Processing in background..."];
+    [statusText setStringValue: isFirstLoad ? @"Please drag in the MachO file" :  @"Processing in background..."];
+    stopButton.hidden = isFirstLoad;
   for (MVLayout * layout in dataController.layouts)
   {
 #ifdef MV_NO_MULTITHREAD
@@ -519,6 +589,13 @@ enum ViewType
 - (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
   // create a temporary copy for patching
+    if([absoluteURL.absoluteString isEqualToString:@"file:///"]){
+        isFirstLoad = YES;
+       return YES;
+    }else{
+        isFirstLoad = NO;
+    }
+    
   const char *tmp = [[MVDocument temporaryDirectory] UTF8String];
   char *tmpFilePath = strdup(tmp);
   if (mktemp(tmpFilePath) == NULL)
@@ -531,7 +608,7 @@ enum ViewType
   NSURL * tmpURL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:tmpFilePath]];
   free(tmpFilePath);
 
-  [[NSFileManager defaultManager] copyItemAtURL:absoluteURL
+  [[NSFileManager defaultManager] copyItemAtURL:absoluteURL//file:///Users/apple/Desktop/Product_jinGangWallet
                                           toURL:tmpURL
                                           error:outError];
   if (*outError) return NO;

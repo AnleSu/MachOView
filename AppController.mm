@@ -286,6 +286,8 @@ int64_t nrow_loaded; // number of loaded rows
   [NSThread detachNewThreadSelector:@selector(printStat) toTarget:self withObject:nil];
 #endif 
 
+    // open a file dialogue
+#ifdef false
   /* default is to not open a file dialogue */
   if ([[NSUserDefaults standardUserDefaults] objectForKey:@"OpenAtLaunch"] != nil)
   {
@@ -299,6 +301,11 @@ int64_t nrow_loaded; // number of loaded rows
       }
     }
   }
+#endif
+    //open a file dialogue
+    [self application:NSApp openFile:@"/"];
+    
+    
 }
 
 //----------------------------------------------------------------------------
