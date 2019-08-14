@@ -1,10 +1,11 @@
+```
    _____                .__     ____________   ____.__               
   /     \ _____    ____ |  |__  \_____  \   \ /   /|__| ______  _  __
  /  \ /  \\__  \ _/ ___\|  |  \  /   |   \   Y   / |  |/ __ \ \/ \/ /
 /    Y    \/ __ \\  \___|   Y  \/    |    \     /  |  \  ___/\     / 
 \____|__  (____  /\___  >___|  /\_______  /\___/   |__|\___  >\/\_/  
         \/     \/     \/     \/         \/                 \/        
-
+```
 A fork from MachOView to update and fix some bugs, mostly Mountain Lion & iOS 6 related.
 Also some small changes to the original behaviour.
 
@@ -65,6 +66,8 @@ fG!
 
 ```
 
-**注：已生成一个可直接安装的pkg(Version:2.5.9276)文件，无需再自行编译，[点此下载MachOView]()**
+**注：已生成一个可直接安装的pkg(Version:2.5.9276)文件，无需再自行编译，[点此下载MachOView](https://github.com/mythkiven/MachOView/raw/master/MachOView%202019-08-15%2001-08-07/MachOView.pkg)**
 
-**md5: sha1:**
+**md5:d218e9a42e2e891b47f205f4bcdc388f **
+
+**sha1:7cb343666b4995c2d64781259a6a0522888c6498**
