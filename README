@@ -31,3 +31,31 @@ The whole Mach-O parsing code needs to be reviewed and made more robust.
 
 Enjoy,
 fG!
+
+-----------------------------------
+-----------------------------------
+
+
+在 Version:2.4.9121 的基础上：
+
+
+- 1、增加拖拽的功能。【进行中】
+
+- 2、修复Xcode10.x的兼容性问题；
+
+```
+1、报错：'string' file not found
+修改方案：C++标准库修改为libc++
+
+2、crash: fwrite写入空值crash
+修改方案：判空即可
+```
+
+- 3、其他修改：
+
+```
+1、部分 KVC 增加判空处理；
+2、进度条更新代码放入主线程中；
+Version:2.4.9130
+BundleID 变更为: com.mythkiven.MachOView
+```
