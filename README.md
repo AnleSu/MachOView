@@ -39,15 +39,14 @@ fG!
 
 在fork的版本:V2.4.9121 基础之上进行修改，目前版本:V2.5.9276。修改内容如下：
 
-- 1、增加拖拽的功能。
+- 1、增加拖拽的功能：
 
 ```
 1、首次打开时，会显示初始界面，可直接往界面上拖动Mach-O文件；
 2、每次拖动文件的最大数量是3个文件；
-虽然我一般都会用cmd+o打开文档，但是对于不经常使用的朋友来说，直接拖拽应该还是不错的体验。
 ```
 
-- 2、修复Xcode10.x的兼容性问题；
+- 2、修复Xcode10.x的兼容性问题：
 
 ```
 1、报错：'string' file not found
@@ -68,6 +67,18 @@ fG!
 
 **注：已生成一个可直接安装的pkg(Version:2.5.9276)文件，无需再自行编译，[点此下载MachOView](https://github.com/mythkiven/MachOView/raw/master/MachOView%202019-08-15%2001-08-07/MachOView.pkg)**
 
-**md5:d218e9a42e2e891b47f205f4bcdc388f **
+**md5:d218e9a42e2e891b47f205f4bcdc388f**
 
 **sha1:7cb343666b4995c2d64781259a6a0522888c6498**
+
+使用技巧
+```
+最快捷的打开方式(在终端或Alfred)
+$open -a MachOView XX
+$open -b MachOView XX
+
+其次是
+$open -b/-a MachOView 或 Alfred 或 点击图标
+然后拖动Mach-O文件到已打开的初始页面上或程序坞(Dock)中的图标上
+```
+   
