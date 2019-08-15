@@ -33,6 +33,58 @@ The whole Mach-O parsing code needs to be reviewed and made more robust.
 Enjoy,
 fG!
 
+
+
+*** MythKiven's branch
+------
+___
+
+Modified on the basis of the fork version: V2.4.9121, the current version: V2.5.9276. The changes are as follows:
+
+
+- 1.Increase the drag and drop function:
+
+```
+1. When first opened, the initial interface will be displayed, and the Mach-O file can be dragged directly to the interface;
+2. The maximum number of files to be dragged each time is 3 files;
+```
+
+- 2.Fix Xcode10.x compatibility issues:
+
+```
+1.error: 'string' file not found
+Modify the program: C++ standard library modified to libc++
+
+2.error: fwrite writes a null value crash
+Modify the program: judge whether it is null or not
+```
+
+- 3.Other modifications:
+
+```
+1. Part of KVC increases whether the judgment is an empty string;
+2. The progress bar update code is placed in the main thread;
+3. Fix code that may have a memory leak.
+```
+
+**Note: A pkg (Version:2.5.9276) file can be directly installed, no need to compile itself, [Click here to download MachOView](https://github.com/mythkiven/MachOView/raw/master/MachOView%202019-08-15%2001-08-07/MachOView.pkg)**
+
+**md5:d218e9a42e2e891b47f205f4bcdc388f**
+
+**sha1:7cb343666b4995c2d64781259a6a0522888c6498**
+
+skills:
+
+```
+The quickest way to open (in terminal or Alfred)
+$open -a MachOView XX
+$open -b MachOView XX
+
+Followed by
+$open -b/-a MachOView or Alfred or click icon
+Then drag the Mach-O file onto the open initial page or the icon in the Dock
+```
+
 -----------------------------------
 -----------------------------------
 
@@ -72,6 +124,7 @@ fG!
 **sha1:7cb343666b4995c2d64781259a6a0522888c6498**
 
 使用技巧
+
 ```
 最快捷的打开方式(在终端或Alfred)
 $open -a MachOView XX
@@ -81,4 +134,4 @@ $open -b MachOView XX
 $open -b/-a MachOView 或 Alfred 或 点击图标
 然后拖动Mach-O文件到已打开的初始页面上或程序坞(Dock)中的图标上
 ```
-   
+
